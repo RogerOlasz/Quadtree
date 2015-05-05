@@ -42,6 +42,36 @@ public:
 	 
 	void Insert(Collider* col)
 	{
+		if (objects.Count() >= QUADTREE_MAX_ITEMS)
+		{
+			SDL_Rect a, b, c, d;
+
+			// child[0]
+			a.x = parent->rect.x;
+			a.y = parent->rect.y;
+			a.w = parent->rect.w / 2;
+			a.h = parent->rect.h / 2;
+			// child[1]
+			b.x = parent->rect.x + (parent->rect.w / 2);
+			b.y = parent->rect.y;
+			b.w = parent->rect.w / 2;
+			b.h = parent->rect.h / 2;
+			// child[2]
+			c.x = parent->rect.x;
+			c.y = parent->rect.y + (parent->rect.h / 2);
+			c.w = parent->rect.w / 2;
+			c.h = parent->rect.h / 2;
+			// child[3]
+			d.x = parent->rect.x + b.x;
+			d.y = parent->rect.y + c.y;
+			d.w = parent->rect.w / 2;
+			d.h = parent->rect.h / 2;
+		}
+		/*SDL_Rect c = App->renderer->camera;
+		c.x = -c.x;
+		quadtree.SetBoundaries(c);*/
+
+
 		// TODO: Insertar un nou Collider al quadtree
 		// En principi cada node por enmagatzemar QUADTREE_MAX_ITEMS nodes (encara que podrien ser més)
 		// Si es detecten més, el node s'ha de tallar en quatre

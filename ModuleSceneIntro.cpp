@@ -50,6 +50,8 @@ update_status ModuleSceneIntro::Update()
 		r.h = rand() % App->renderer->camera.h / 4;
 
 		App->collision->AddCollider(r, COLLIDER_ENEMY);
+
+		
 	}
 
 	return UPDATE_CONTINUE;
