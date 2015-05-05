@@ -44,46 +44,59 @@ public:
 	{
 		if (objects.Count() >= QUADTREE_MAX_ITEMS)
 		{
-			SDL_Rect a, b, c, d;
+			if (childs[0] == NULL)
+			{
+				SDL_Rect a, b, c, d;
 
-			// child[0]
-			a.x = parent->rect.x;
-			a.y = parent->rect.y;
-			a.w = parent->rect.w / 2;
-			a.h = parent->rect.h / 2;
-			// child[1]
-			b.x = parent->rect.x + (parent->rect.w / 2);
-			b.y = parent->rect.y;
-			b.w = parent->rect.w / 2;
-			b.h = parent->rect.h / 2;
-			// child[2]
-			c.x = parent->rect.x;
-			c.y = parent->rect.y + (parent->rect.h / 2);
-			c.w = parent->rect.w / 2;
-			c.h = parent->rect.h / 2;
-			// child[3]
-			d.x = parent->rect.x + b.x;
-			d.y = parent->rect.y + c.y;
-			d.w = parent->rect.w / 2;
-			d.h = parent->rect.h / 2;
+				// child[0]
+				a.x = rect.x;
+				a.y = rect.y;
+				a.w = rect.w / 2;
+				a.h = rect.h / 2;
+				// child[1]
+				b.x = rect.x + (rect.w / 2);
+				b.y = rect.y;
+				b.w = rect.w / 2;
+				b.h = rect.h / 2;
+				// child[2]
+				c.x = rect.x;
+				c.y = rect.y + (rect.h / 2);
+				c.w = rect.w / 2;
+				c.h = rect.h / 2;
+				// child[3]
+				d.x = rect.x + b.x;
+				d.y = rect.y + c.y;
+				d.w = rect.w / 2;
+				d.h = rect.h / 2;
 
-			childs[0] = new p2QuadTreeNode(a);
-			childs[1] = new p2QuadTreeNode(b);
-			childs[2] = new p2QuadTreeNode(c);
-			childs[3] = new p2QuadTreeNode(d);
+				childs[0] = new p2QuadTreeNode(a);
+				childs[1] = new p2QuadTreeNode(b);
+				childs[2] = new p2QuadTreeNode(c);
+				childs[3] = new p2QuadTreeNode(d);
+			}
 
 			for (unsigned int i = 0; i < 4; i++)
 			{
-				for (unsigned int j = 0; j < 2; j++)
+				if (Intersects(col->rect, childs[i]->rect))
 				{
-					if (Contains(objects[j]->rect, childs[i]->rect))
-					{
-						childs[i]->objects.PushBack(objects[j]);
-					}
+					childs[i]->Insert(col);
 				}
-				
 			}
 		}
+		else
+		{
+			objects.PushBack(col);
+		}
+
+		/*for (unsigned int j = 0; j < 2; j++)
+		{
+		if (Intersects(objects[j]->rect, childs[i]->rect))
+		{
+		childs[i]->objects.PushBack(objects[j]);
+		objects
+		}
+		}
+		*/
 
 		// TODO: Insertar un nou Collider al quadtree
 		// En principi cada node pot enmagatzemar QUADTREE_MAX_ITEMS nodes (encara que podrien ser més)
