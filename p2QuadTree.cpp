@@ -12,8 +12,8 @@ bool Contains(const SDL_Rect& a, const SDL_Rect& b)
 bool Intersects(const SDL_Rect& a, const SDL_Rect& b)
 {
 	return SDL_HasIntersection(&a, &b) == SDL_TRUE;
-	/*return (a.x < b.x + b.w &&
+	return (a.x < b.x + b.w &&
 			a.x + a.w > b.x &&
 			a.y < b.y + b.h &&
-			a.h + a.y > b.y);*/
+			a.h + a.y > b.y);
 }

@@ -72,13 +72,23 @@ public:
 			childs[2] = new p2QuadTreeNode(c);
 			childs[3] = new p2QuadTreeNode(d);
 
+			for (unsigned int i = 0; i < 4; i++)
+			{
+				for (unsigned int j = 0; j < 2; j++)
+				{
+					if (Contains(objects[j]->rect, childs[i]->rect))
+					{
 
+					}
+				}
+				
+			}
 		}
 
 		// TODO: Insertar un nou Collider al quadtree
-		// En principi cada node por enmagatzemar QUADTREE_MAX_ITEMS nodes (encara que podrien ser més)
+		// En principi cada node pot enmagatzemar QUADTREE_MAX_ITEMS nodes (encara que podrien ser més)
 		// Si es detecten més, el node s'ha de tallar en quatre
-		// Si es talla, a de redistribuir tots els seus colliders pels nous nodes (childs) sempre que pugui
+		// Si es talla, ha de redistribuir tots els seus colliders pels nous nodes (childs) sempre que pugui
 		// Nota: un Collider pot estar a més de un node del quadtree
 		// Nota: si un Collider intersecciona als quatre childs, deixar-lo al pare
 	}
