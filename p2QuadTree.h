@@ -78,7 +78,7 @@ public:
 				{
 					if (Contains(objects[j]->rect, childs[i]->rect))
 					{
-
+						childs[i]->objects.PushBack(objects[j]);
 					}
 				}
 				
