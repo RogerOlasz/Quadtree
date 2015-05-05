@@ -42,7 +42,7 @@ public:
 	 
 	void Insert(Collider* col)
 	{
-		if (objects.Count() >= QUADTREE_MAX_ITEMS)
+		if (objects.Count() >= QUADTREE_MAX_ITEMS && childs[0] == NULL)
 		{
 			if (childs[0] == NULL)
 			{
@@ -75,11 +75,51 @@ public:
 				childs[3] = new p2QuadTreeNode(d);
 			}
 
+			/*p2DynArray<Collider*> objects_tmp = objects;
+			objects.Clear();
+
+			for (unsigned int i = 0; i < QUADTREE_MAX_ITEMS; i++)
+			{
+				if (Intersects(col->rect, childs[0]->rect) &&
+					Intersects(col->rect, childs[1]->rect) &&
+					Intersects(col->rect, childs[2]->rect) &&
+					Intersects(col->rect, childs[3]->rect))
+				{
+					objects.PushBack(objects_tmp[i]);
+				}
+				else
+				{
+					for (unsigned int j = 0; j < 4; j++)
+					{
+						if (Intersects(objects_tmp[i]->rect, childs[j]->rect))
+							childs[j]->objects.PushBack(objects_tmp[i]);
+					}
+				}
+			}
+
+		if (Intersects(col->rect, childs[0]->rect) &&
+			Intersects(col->rect, childs[1]->rect) &&
+			Intersects(col->rect, childs[2]->rect) &&
+			Intersects(col->rect, childs[3]->rect))
+			objects.PushBack(col);
+		else
+		{
+			for (unsigned int i = 0; i < 4; i++)
+			{
+				if (Intersects(col->rect, childs[i]->rect) == true)
+				{
+					childs[i]->Insert(col);
+				}
+			}
+		}*/
 			for (unsigned int i = 0; i < 4; i++)
 			{
 				for (unsigned int j = 0; j < 2; j++)
 				{
-
+					if (Intersects(objects[j]->rect, childs[i]->rect))
+					{
+						childs[i]->objects.PushBack(objects[j]);
+					}
 				}
 			}
 
@@ -113,7 +153,22 @@ public:
 		// de fer intersecció amb el rectangle r
 		// retornar el número de intersección calculades en el procés
 		// Nota: és una funció recursiva
-		return 0;
+		int tests = 0;
+
+		if (Intersects(rect, r) == true)
+		{
+			for (unsigned int i = 0; i < objects.Count(); i++)
+			{
+				tests++;
+				nodes.PushBack(objects[i]);
+			}
+		}
+
+		if (childs[0] != NULL)
+			for (unsigned int i = 0; i < 4; i++)
+				tests += childs[i]->CollectCandidates(nodes, r);
+
+		return tests;
 	}
 
 	void CollectRects(p2DynArray<p2QuadTreeNode*>& nodes) 
