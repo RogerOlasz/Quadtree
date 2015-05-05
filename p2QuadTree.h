@@ -77,26 +77,26 @@ public:
 
 			for (unsigned int i = 0; i < 4; i++)
 			{
+				for (unsigned int j = 0; j < 2; j++)
+				{
+
+				}
+			}
+
+			for (unsigned int i = 0; i < 4; i++)
+			{
 				if (Intersects(col->rect, childs[i]->rect))
 				{
 					childs[i]->Insert(col);
 				}
 			}
+
+			
 		}
 		else
 		{
 			objects.PushBack(col);
-		}
-
-		/*for (unsigned int j = 0; j < 2; j++)
-		{
-		if (Intersects(objects[j]->rect, childs[i]->rect))
-		{
-		childs[i]->objects.PushBack(objects[j]);
-		objects
-		}
-		}
-		*/
+		}		
 
 		// TODO: Insertar un nou Collider al quadtree
 		// En principi cada node pot enmagatzemar QUADTREE_MAX_ITEMS nodes (encara que podrien ser més)
