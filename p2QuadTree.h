@@ -66,11 +66,14 @@ public:
 			d.y = parent->rect.y + c.y;
 			d.w = parent->rect.w / 2;
 			d.h = parent->rect.h / 2;
-		}
-		/*SDL_Rect c = App->renderer->camera;
-		c.x = -c.x;
-		quadtree.SetBoundaries(c);*/
 
+			childs[0] = new p2QuadTreeNode(a);
+			childs[1] = new p2QuadTreeNode(b);
+			childs[2] = new p2QuadTreeNode(c);
+			childs[3] = new p2QuadTreeNode(d);
+
+
+		}
 
 		// TODO: Insertar un nou Collider al quadtree
 		// En principi cada node por enmagatzemar QUADTREE_MAX_ITEMS nodes (encara que podrien ser més)
