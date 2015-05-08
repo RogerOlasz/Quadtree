@@ -42,7 +42,12 @@ public:
 	 
 	void Insert(Collider* col)
 	{
-		if (objects.Count() >= QUADTREE_MAX_ITEMS)
+
+		if (objects.Count() < QUADTREE_MAX_ITEMS && childs[0] == NULL)
+		{
+			objects.PushBack(col);
+		}
+		else
 		{
 			if (childs[0] == NULL)
 			{
@@ -64,8 +69,8 @@ public:
 				c.w = rect.w / 2;
 				c.h = rect.h / 2;
 				// child[3]
-				d.x = rect.x + b.x;
-				d.y = rect.y + c.y;
+				d.x = rect.x + b.w;
+				d.y = rect.y + c.h;
 				d.w = rect.w / 2;
 				d.h = rect.h / 2;
 
@@ -73,11 +78,13 @@ public:
 				childs[1] = new p2QuadTreeNode(b);
 				childs[2] = new p2QuadTreeNode(c);
 				childs[3] = new p2QuadTreeNode(d);
-				
+
+				childs[0]->parent = childs[1]->parent = childs[2]->parent = childs[3]->parent = this;
+
 				p2DynArray<Collider*> objects_tmp = objects;
 				objects.Clear();
 
-				for (unsigned int i = 0; i < QUADTREE_MAX_ITEMS; i++)
+				for (unsigned int i = 0; i < objects_tmp.Count(); i++)
 				{
 					if (Intersects(col->rect, childs[0]->rect) &&
 						Intersects(col->rect, childs[1]->rect) &&
@@ -93,35 +100,29 @@ public:
 							if (Intersects(objects_tmp[i]->rect, childs[j]->rect))
 							{
 								childs[j]->objects.PushBack(objects_tmp[i]);
-							}	
+							}
+								
 						}
 					}
 				}
 			}
-			
-				if (Intersects(col->rect, childs[0]->rect) &&
-					Intersects(col->rect, childs[1]->rect) &&
-					Intersects(col->rect, childs[2]->rect) &&
-					Intersects(col->rect, childs[3]->rect))
+
+			if (Intersects(col->rect, childs[0]->rect) &&
+				Intersects(col->rect, childs[1]->rect) &&
+				Intersects(col->rect, childs[2]->rect) &&
+				Intersects(col->rect, childs[3]->rect))
+				objects.PushBack(col);
+			else
+			{
+				for (unsigned int i = 0; i < 4; i++)
 				{
-					objects.PushBack(col);
-				}
-				else
-				{
-					for (unsigned int i = 0; i < 4; i++)
+					if (Intersects(col->rect, childs[i]->rect))
 					{
-						if (Intersects(col->rect, childs[i]->rect))
-						{
-							childs[i]->Insert(col);
-						}
+						childs[i]->Insert(col);
 					}
 				}
-			
-		}
-		else
-		{
-			objects.PushBack(col);
-		}		
+			}
+		}	
 
 		// TODO: Insertar un nou Collider al quadtree
 		// En principi cada node pot enmagatzemar QUADTREE_MAX_ITEMS nodes (encara que podrien ser més)
@@ -130,7 +131,6 @@ public:
 		// Nota: un Collider pot estar a més de un node del quadtree
 		// Nota: si un Collider intersecciona als quatre childs, deixar-lo al pare
 	}
-
 	int CollectCandidates(p2DynArray<Collider*>& nodes, const SDL_Rect& r) const
 	{
 		// TODO:
@@ -140,7 +140,7 @@ public:
 		// Nota: és una funció recursiva
 		int tests = 0;
 
-		if (Intersects(rect, r) == true)
+		if (Intersects(rect, r))
 		{
 			for (unsigned int i = 0; i < objects.Count(); i++)
 			{
@@ -150,8 +150,8 @@ public:
 		}
 
 		if (childs[0] != NULL)
-			for (unsigned int i = 0; i < 4; i++)
-				tests += childs[i]->CollectCandidates(nodes, r);
+		for (unsigned int i = 0; i < 4; i++)
+			tests += childs[i]->CollectCandidates(nodes, r);
 
 		return tests;
 	}

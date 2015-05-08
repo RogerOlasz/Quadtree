@@ -118,7 +118,7 @@ update_status ModuleCollision::Update()
 		p2DynArray<p2QuadTreeNode*> nodes(25);
 		quadtree.CollectRects(nodes);
 
-		for(int i = 0; i < nodes.Count(); ++i)
+		for(unsigned int i = 0; i < nodes.Count(); ++i)
 			App->renderer->DrawQuad(nodes[i]->rect, 255, 255, 255, 255, false);
 
 		// Create a collider around mouse position
@@ -134,10 +134,10 @@ update_status ModuleCollision::Update()
 		int t = quadtree.CollectCandidates(cols, m);
 		int qtests = 0;
 
-		for(int i = 0; i < cols.Count(); ++i)
+		for(unsigned int i = 0; i < cols.Count(); ++i)
 		{
 			App->renderer->DrawQuad(cols[i]->rect, 0, 255, 0, 255, false);
-			for(int j = 1 + 1; j < cols.Count(); ++j)
+			for(unsigned int j = 1 + 1; j < cols.Count(); ++j)
 				++qtests;
 		}
 
